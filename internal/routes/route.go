@@ -3,16 +3,16 @@ package routes
 import (
 	"net/http"
 	"products-api/internal/controllers"
-	"products-api/internal/middleware" // Importa o middleware
+	"products-api/internal/middleware"
 )
 
 func SetupRoutes(productController *controllers.ProductController) *http.ServeMux {
 	router := http.NewServeMux()
 
-	// Middleware de autenticação
-	authMiddleware := middleware.BasicAuthMiddleware("admin", "1234")
+	authMiddleware := middleware.JWTMiddleware
 
 	router.HandleFunc("/hello", greet)
+	router.HandleFunc("/login", controllers.Login)
 
 	router.Handle("/products", authMiddleware(http.HandlerFunc(productController.GetProductsAll)))
 	router.Handle("/product/", authMiddleware(http.HandlerFunc(productController.GetProductByID)))
