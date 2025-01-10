@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"products-api/internal/models"
 	"strconv"
+	"strings"
 )
 
 type ProductController struct {
@@ -35,7 +36,9 @@ func (p *ProductController) GetProductsAll(w http.ResponseWriter, r *http.Reques
 }
 
 func (p *ProductController) GetProductByID(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.PathValue("id"))
+	pathParts := strings.Split(r.URL.Path, "/")
+
+	id, err := strconv.Atoi(pathParts[2])
 
 	if err != nil {
 		http.Error(w, "ID inválido", http.StatusBadRequest)
@@ -97,7 +100,9 @@ func (p *ProductController) UpdateProduct(w http.ResponseWriter, r *http.Request
 	fmt.Fprintf(w, "Produto atualizado com sucesso!")
 }
 func (p *ProductController) DeleteProduct(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.PathValue("id"))
+	pathParts := strings.Split(r.URL.Path, "/")
+
+	id, err := strconv.Atoi(pathParts[2])
 
 	if err != nil {
 		http.Error(w, "ID inválido", http.StatusBadRequest)
